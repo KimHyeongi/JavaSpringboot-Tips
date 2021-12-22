@@ -1,6 +1,6 @@
 rootProject.name = 'JavaSpringboot-Tips'
+include 'domain-model'
 include 'domain-service'
 include 'app-api'
-include 'domain-model'
 include 'internal-api'
 

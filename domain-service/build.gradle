@@ -17,10 +17,19 @@ dependencies {
 
     // Spring
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'org.hibernate:hibernate-ehcache'
+    implementation 'org.hibernate:hibernate-envers'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-pool2:2.11.1'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.5'
 
     // JPA
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
     implementation("com.querydsl:querydsl-apt:5.0.0")
+
 
 }

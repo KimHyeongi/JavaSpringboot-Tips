@@ -19,7 +19,7 @@ public class ReservationTxService {
 	public Reservation findAndUpdate(Long id, Long productId, long ms) {
 		Reservation reservation = reservationRepository.findById(id).orElseThrow(()->new EntityNotFoundException(String.valueOf(id)));
 		ThreadSleep.sleep(ms);
-		reservation.setProductId(productId);
+		reservation.updateProductId(productId);
 		reservationRepository.save(reservation);
 		return reservation;
 	}

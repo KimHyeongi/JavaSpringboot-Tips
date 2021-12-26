@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Getter
 @Builder
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ApiResponse<T> {
     private String code;
     private String message;

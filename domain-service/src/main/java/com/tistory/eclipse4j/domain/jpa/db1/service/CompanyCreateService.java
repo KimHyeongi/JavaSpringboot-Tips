@@ -24,7 +24,7 @@ public class CompanyCreateService {
 	public Company updateCompanyNameById(Long id, String name) {
 		Company orgCompany = companyRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
-		orgCompany.setName(name);
+		orgCompany.updateCompanyName(name);
 		return companyRepository.save(orgCompany);
 	}
 
@@ -32,7 +32,7 @@ public class CompanyCreateService {
 	public Company updateCompanyCodeById(Long id, String code) {
 		Company orgCompany = companyRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
-		orgCompany.setCode(code);
+		orgCompany.updateCompanyCode(code);
 		Company updatedCompany = companyRepository.save(orgCompany);
 		applicationEventPublisher.publishEvent(new CompanyCodeUpdateEvent(updatedCompany));
 		return updatedCompany;

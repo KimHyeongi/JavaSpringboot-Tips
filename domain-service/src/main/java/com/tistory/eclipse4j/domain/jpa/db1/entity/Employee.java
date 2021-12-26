@@ -1,28 +1,29 @@
 package com.tistory.eclipse4j.domain.jpa.db1.entity;
 
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
-@SuppressWarnings("serial")
 @Getter
-@Setter
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "employee")
-@Cacheable
 @SQLDelete(sql = "update employee set deleted = true where id = ?", check = ResultCheckStyle.COUNT)
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Employee extends AuditingEntity implements Serializable {
+
+    public Employee(final Long id) {
+        this.id = id;
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,4 +34,17 @@ public class Employee extends AuditingEntity implements Serializable {
 
     @ManyToOne
     private Company company;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Employee employee = (Employee) o;
+        return id != null && Objects.equals(id, employee.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

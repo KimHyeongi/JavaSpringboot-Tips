@@ -22,6 +22,49 @@ import java.time.Duration;
 @EnableCaching
 public class LettuceRedisCacheConfiguration {
 
+	@SuppressWarnings("rawtypes ")
+	@Bean
+	public GenericObjectPoolConfig genericObjectPoolConfig() {
+		GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
+		genericObjectPoolConfig.setMaxIdle(maxIdle);
+		genericObjectPoolConfig.setMinIdle(minIdle);
+		genericObjectPoolConfig.setMaxTotal(maxActive);
+		//genericObjectPoolConfig.setMaxWaitMillis(maxWait);
+		return genericObjectPoolConfig;
+	}
+
+	@Bean
+	@Primary
+	public RedisConnectionFactory redisConnectionFactory() {
+		LettuceClientConfiguration lettuceClientConfiguration =
+				LettucePoolingClientConfiguration.builder()
+						.commandTimeout(Duration.ofMillis(timeout))
+						.poolConfig(genericObjectPoolConfig())
+						.build();
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(server, port);
+		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
+	}
+
+	@Bean
+	public RedisCacheConfiguration redisCacheConfiguration() {
+		return RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(600)).disableCachingNullValues();
+	}
+
+	@Primary
+	@Bean("redisCacheManager")
+	public CacheManager redisCacheManager() {
+		return RedisCacheManager.builder(redisConnectionFactory()).cacheDefaults(redisCacheConfiguration()).transactionAware().build();
+	}
+
+
+	@Bean("redisCacheManagerTenMin")
+	public CacheManager redisCacheManagerTenMin() {
+		return RedisCacheManager.builder(redisConnectionFactory())
+				.cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)).disableCachingNullValues()).transactionAware()
+				.build();
+	}
+
+
 	@Value("${spring.redis.host}")
 	private String server;
 
@@ -42,46 +85,4 @@ public class LettuceRedisCacheConfiguration {
 
 	@Value("${spring.redis.lettuce.pool.max-wait:2000}")
 	private long maxWait;
-
-	@SuppressWarnings("rawtypes")
-	@Bean
-	public GenericObjectPoolConfig genericObjectPoolConfig() {
-		GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
-		genericObjectPoolConfig.setMaxIdle(maxIdle);
-		genericObjectPoolConfig.setMinIdle(minIdle);
-		genericObjectPoolConfig.setMaxTotal(maxActive);
-		genericObjectPoolConfig.setMaxWaitMillis(maxWait);
-		return genericObjectPoolConfig;
-	}
-
-	@Bean
-	@Primary
-	public RedisConnectionFactory redisConnectionFactory() {
-		LettuceClientConfiguration lettuceClientConfiguration =
-				LettucePoolingClientConfiguration.builder().commandTimeout(Duration.ofMillis(timeout)).poolConfig(genericObjectPoolConfig()).build();
-		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(server, port);
-		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
-	}
-
-	@Bean
-	public RedisCacheConfiguration redisCacheConfiguration() {
-		RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(600)).disableCachingNullValues();
-		return cacheConfig;
-	}
-
-	@Primary
-	@Bean("redisCacheManager")
-	public CacheManager redisCacheManager() {
-		CacheManager rcm = RedisCacheManager.builder(redisConnectionFactory()).cacheDefaults(redisCacheConfiguration()).transactionAware().build();
-		return rcm;
-	}
-
-
-	@Bean("redisCacheManagerTenMin")
-	public CacheManager redisCacheManagerTenMin() {
-		CacheManager rcm = RedisCacheManager.builder(redisConnectionFactory())
-				.cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)).disableCachingNullValues()).transactionAware()
-				.build();
-		return rcm;
-	}
 }

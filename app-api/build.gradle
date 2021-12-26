@@ -1,24 +1,24 @@
 plugins {
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+//group 'org.example'
+//version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly project(':domain-model')
-    compileOnly project(':domain-service')
+//    implementation project(':domain-model')
+    implementation project(':domain-service')
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
-
-tasks.jar {
+jar {
     enabled = false
 }
 
-tasks.bootJar {
-    enabled = false
+bootJar {
+    enabled(true)
+    mainClass.set("com.tistory.eclipse4j.app.api.AppApiApplication")
 }

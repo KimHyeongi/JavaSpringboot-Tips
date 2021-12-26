@@ -1,7 +1,10 @@
 package com.tistory.eclipse4j.domain.jpa.db1.entity;
 
-import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,8 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-@SuppressWarnings("serial")
 @SqlResultSetMappings({
         @SqlResultSetMapping(name = "SimpleCompany",
                 classes = @ConstructorResult(targetClass = SimpleCompany.class,
@@ -20,23 +23,17 @@ import java.util.List;
                         }))
 })
 @Getter
-@Setter
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "company")
-@Audited
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Company extends AuditingEntity implements Serializable {
 
-    public static final Company DEFAULT = Company.builder().build();
-
-    public Company(String code) {
-        this.code = code;
+    public Company(final Long id) {
+        this.id = id;
     }
 
     @Id
@@ -51,10 +48,31 @@ public class Company extends AuditingEntity implements Serializable {
     private String code;
 
     @NotAudited
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Employee> employees;
 
     @Column(name = "streetAddress")
     private String streetAddress;
+
+    public void updateCompanyName(String name) {
+        this.name = name;
+    }
+
+    public void updateCompanyCode(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Company company = (Company) o;
+        return id != null && Objects.equals(id, company.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

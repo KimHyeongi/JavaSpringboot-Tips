@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class GenericSpringEvent<T> {
-    private T eventSource;
+    private final T eventSource;
 
     public GenericSpringEvent(T eventSource){
         this.eventSource = eventSource;

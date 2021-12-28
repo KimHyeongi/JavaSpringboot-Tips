@@ -5,7 +5,7 @@ bootJar { enabled = false}
 jar {enabled = true}
 
 dependencies {
-//    implementation(project(":domain-model"))
+    implementation(project(":domain-model"))
 
     // Spring
     api 'org.springframework.boot:spring-boot-starter-data-jpa'

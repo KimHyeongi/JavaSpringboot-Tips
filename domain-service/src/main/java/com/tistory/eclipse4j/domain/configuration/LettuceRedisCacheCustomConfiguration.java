@@ -20,7 +20,7 @@ import java.time.Duration;
 
 @Configuration
 @EnableCaching
-public class LettuceRedisCacheConfiguration {
+public class LettuceRedisCacheCustomConfiguration {
 
 	@SuppressWarnings("rawtypes ")
 	@Bean
@@ -29,7 +29,7 @@ public class LettuceRedisCacheConfiguration {
 		genericObjectPoolConfig.setMaxIdle(maxIdle);
 		genericObjectPoolConfig.setMinIdle(minIdle);
 		genericObjectPoolConfig.setMaxTotal(maxActive);
-		//genericObjectPoolConfig.setMaxWaitMillis(maxWait);
+		genericObjectPoolConfig.setMaxWait(Duration.ofMillis(maxWait));
 		return genericObjectPoolConfig;
 	}
 

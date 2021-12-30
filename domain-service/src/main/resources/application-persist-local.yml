@@ -27,30 +27,31 @@ spring:
             factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
     open-in-view: false
     database-platform: org.hibernate.dialect.MariaDB103Dialect
-datasource:
-  hikari:
-    jpadb1:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbcUrl: jdbc:mysql://127.0.0.1:3306/spring-tips-db1?useUnicode=true&characterEncoding=utf8&useSSL=false
-      username: githubstudy
-      password: githubstudy
-      minimum-idle: 2
-      maximum-pool-size: 5
-      max-lifetime: 50000
-      idle-timeout: 40000
-      type: com.zaxxer.hikari.HikariDataSource
-      auto-commit: false
-    jpadb2:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbcUrl: jdbc:mysql://127.0.0.1:3306/spring-tips-db2?useUnicode=true&characterEncoding=utf8&useSSL=false
-      username: githubstudy
-      password: githubstudy
-      minimum-idle: 2
-      maximum-pool-size: 5
-      max-lifetime: 50000
-      idle-timeout: 40000
-      type: com.zaxxer.hikari.HikariDataSource
-      auto-commit: false
+
+  datasource:
+    hikari:
+      jpadb1:
+        driver-class-name: org.mariadb.jdbc.Driver
+        jdbc-url: jdbc:mariadb://127.0.0.1:3306/spring-tips-db1?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: githubstudy
+        password: githubstudy
+        minimum-idle: 2
+        maximum-pool-size: 5
+        max-lifetime: 50000
+        idle-timeout: 40000
+        type: com.zaxxer.hikari.HikariDataSource
+        auto-commit: false
+      jpadb2:
+        driver-class-name: org.mariadb.jdbc.Driver
+        jdbc-url: jdbc:mariadb://127.0.0.1:3306/spring-tips-db2?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: githubstudy
+        password: githubstudy
+        minimum-idle: 2
+        maximum-pool-size: 5
+        max-lifetime: 50000
+        idle-timeout: 40000
+        type: com.zaxxer.hikari.HikariDataSource
+        auto-commit: false
   redis:
     host: 127.0.0.1
     port: 6566
@@ -64,7 +65,7 @@ datasource:
     timeout: 3000
   redis-cached:
     host: 127.0.0.1
-    port: 6566
+    port: 6379
     lettuce:
       pool:
         max-active: 15
@@ -75,7 +76,7 @@ datasource:
     timeout: 3000
   redis-stored:
     host: 127.0.0.1
-    port: 6567
+    port: 6379
     lettuce:
       pool:
         max-active: 15

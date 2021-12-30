@@ -1,12 +1,12 @@
 package com.tistory.eclipse4j.domain.jpa.configuration;
 
-import java.sql.SQLException;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.sql.SQLException;
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"com.tistory.eclipse4j.domain.jpa.db1"},
@@ -30,21 +32,21 @@ public class JPATipDb1Configuration {
     @Primary
     @Bean(name = "jpadb1DataSource")
     @ConfigurationProperties(prefix = "spring.datasource.hikari.jpadb1")
-    public DataSource jpadb1DataSource() throws SQLException {
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        return hikariDataSource;
+    public DataSource jpadb1DataSource() {
+        return new HikariDataSource();
     }
 
     @Primary
     @PersistenceContext(unitName = "jpadb1")
     @Bean(name = "jpadb1EntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean jpadb1EntityManagerFactory(
-            EntityManagerFactoryBuilder builder,
+            EntityManagerFactoryBuilder entityManagerFactoryBuilder,
             @Qualifier("jpadb1DataSource") DataSource jpadb1DataSource) {
-        return builder
+        return entityManagerFactoryBuilder
                 .dataSource(jpadb1DataSource)
                 .packages("com.tistory.eclipse4j.domain.jpa.db1")
-                .persistenceUnit("jpadb1").build();
+                .persistenceUnit("jpadb1").
+                build();
     }
 
     @Primary

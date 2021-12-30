@@ -26,10 +26,13 @@ dependencies {
     api "com.querydsl:querydsl-jpa:5.0.0"
     api "com.querydsl:querydsl-apt:5.0.0"
 
+    api "org.mariadb.jdbc:mariadb-java-client"
 
+//    annotationProcessor("javax.annotation:javax.annotation-api:1.3.2")
+//    annotationProcessor('jakarta.persistence:jakarta.persistence-api:3.0.0')
+//    annotationProcessor('jakarta.annotation:jakarta.annotation-api:2.0.0')
 
-    annotationProcessor("javax.annotation:javax.annotation-api:1.3.2")
-
-    annotationProcessor('jakarta.persistence:jakarta.persistence-api:3.0.0')
-    annotationProcessor('jakarta.annotation:jakarta.annotation-api:2.0.0')
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 }
